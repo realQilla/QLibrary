@@ -1,5 +1,7 @@
 package net.qilla.qlibrary.menu;
 
+import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -10,7 +12,9 @@ public class DynamicConfig {
     private final int previousIndex;
     private final int shiftAmount;
 
-    protected DynamicConfig(Builder builder) {
+    protected DynamicConfig(@NotNull Builder builder) {
+        Preconditions.checkNotNull(builder, "Builder cannot be null");
+
         this.dynamicSlots = builder.dynamicSlots;
         this.nextIndex = builder.nextIndex;
         this.previousIndex = builder.previousIndex;

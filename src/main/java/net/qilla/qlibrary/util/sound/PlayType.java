@@ -1,4 +1,4 @@
-package net.qilla.qlibrary.util;
+package net.qilla.qlibrary.util.sound;
 
 public enum PlayType {
     PLAYER_CUR_LOC,

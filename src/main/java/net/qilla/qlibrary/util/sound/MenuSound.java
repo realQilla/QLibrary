@@ -1,9 +1,9 @@
-package net.qilla.qlibrary.util;
+package net.qilla.qlibrary.util.sound;
 
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class QSounds {
+public class MenuSound {
 
     public static final QSound RETURN_MENU = QSound.of(Sound.BLOCK_NOTE_BLOCK_BELL, 0.25f, 1f, SoundCategory.PLAYERS, PlayType.PLAYER);
     public static final QSound MENU_ITEM_APPEAR = QSound.of(Sound.ENTITY_CHICKEN_EGG, 0.5f, 1, SoundCategory.PLAYERS, PlayType.PLAYER);
@@ -17,5 +17,4 @@ public class QSounds {
     public static final QSound ITEM_DELETE = QSound.of(Sound.BLOCK_LAVA_POP, 0.5f, 1, SoundCategory.PLAYERS, PlayType.PLAYER);
     public static final QSound MENU_ROTATE_NEXT = QSound.of(Sound.ENTITY_BREEZE_JUMP, 0.25f, 1f, SoundCategory.PLAYERS, PlayType.PLAYER);
     public static final QSound MENU_ROTATE_PREVIOUS = QSound.of(Sound.ENTITY_BREEZE_LAND, 0.75f, 1.75f, SoundCategory.PLAYERS, PlayType.PLAYER);
-
 }

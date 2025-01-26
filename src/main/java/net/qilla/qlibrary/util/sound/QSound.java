@@ -1,4 +1,4 @@
-package net.qilla.qlibrary.util;
+package net.qilla.qlibrary.util.sound;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.Sound;

@@ -8,7 +8,8 @@ import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
-import net.qilla.qlibrary.player.QPlayer;
+import net.qilla.qlibrary.data.PlayerData;
+import net.qilla.qlibrary.player.EnhancedPlayer;
 import net.qilla.qlibrary.util.tools.CoordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -18,20 +19,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 public class SignInput extends PlayerInput {
 
     private static final int BLOCK_Y_OFFSET = 7;
+    private final EnhancedPlayer player;
     private final List<String> signText;
     private final BlockPos blockPos;
 
-    public SignInput(@NotNull Plugin plugin, @NotNull Player player, @NotNull List<String> signText) {
-        super(plugin, player);
+    public SignInput(@NotNull Plugin plugin, @NotNull PlayerData playerData, @NotNull List<String> signText) {
+        super(plugin, playerData);
         Preconditions.checkNotNull(signText, "List cannot be null");
+        this.player = playerData.getPlayer();
         this.signText = signText;
-        this.blockPos = calcBlockPos(player);
+        this.blockPos = calcBlockPos(this.player);
     }
 
     @Override
@@ -43,7 +45,7 @@ public class SignInput extends PlayerInput {
 
     public void resetBlockState() {
         Bukkit.getScheduler().runTask(super.getPlugin(), () -> {
-            super.getQPlayer().sendPacket(new ClientboundBlockUpdatePacket(blockPos, getQPlayer().getHandle().serverLevel().getBlockState(blockPos)));
+            player.sendPacket(new ClientboundBlockUpdatePacket(blockPos, player.getHandle().serverLevel().getBlockState(blockPos)));
         });
     }
 
@@ -51,16 +53,16 @@ public class SignInput extends PlayerInput {
         CraftSign<SignBlockEntity> sign = createSign(signText);
 
         Bukkit.getScheduler().runTask(super.getPlugin(), () -> {
-            super.getQPlayer().sendPacket(new ClientboundBlockUpdatePacket(blockPos, sign.getHandle()));
-            super.getQPlayer().sendPacket(new ClientboundBlockEntityDataPacket(blockPos, BlockEntityType.SIGN, sign.getUpdateNBT()));
-            super.getQPlayer().sendPacket(new ClientboundOpenSignEditorPacket(blockPos, true));
+            player.sendPacket(new ClientboundBlockUpdatePacket(blockPos, sign.getHandle()));
+            player.sendPacket(new ClientboundBlockEntityDataPacket(blockPos, BlockEntityType.SIGN, sign.getUpdateNBT()));
+            player.sendPacket(new ClientboundOpenSignEditorPacket(blockPos, true));
         });
     }
 
     public @NotNull  CraftSign<SignBlockEntity> createSign(@NotNull List<String> text) {
         Preconditions.checkNotNull(text, "Text cannot be null");
 
-        CraftSign<SignBlockEntity> sign = new CraftSign<>(getQPlayer().getWorld(), new SignBlockEntity(blockPos, Blocks.OAK_SIGN.defaultBlockState()));
+        CraftSign<SignBlockEntity> sign = new CraftSign<>(player.getWorld(), new SignBlockEntity(blockPos, Blocks.OAK_SIGN.defaultBlockState()));
         for(int i = 0; i <= 3 && i < text.size(); i++) {
             sign.setLine(i + 1, text.get(i));
         }
