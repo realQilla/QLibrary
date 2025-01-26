@@ -14,14 +14,24 @@ import java.util.concurrent.CompletableFuture;
 public class QPlayerData implements PlayerData{
 
     private final EnhancedPlayer player;
-    private final EnumMap<CooldownType, Long> cooldownMap = new EnumMap<>(CooldownType.class);
-    private final Deque<QStaticMenu> menuHistory = new ArrayDeque<>();
+    private final EnumMap<CooldownType, Long> cooldownMap;
+    private final Deque<QStaticMenu> menuHistory;
     private CompletableFuture<String> inputFuture;
 
     public QPlayerData(@NotNull EnhancedPlayer player) {
         Preconditions.checkNotNull(player, "Player cannot be null");
 
+        this.menuHistory = new ArrayDeque<>();
+        this.cooldownMap = new EnumMap<>(CooldownType.class);
         this.player = player;
+    }
+
+    public QPlayerData(@NotNull EnhancedPlayer player, @NotNull QPlayerData playerData) {
+        Preconditions.checkNotNull(playerData, "PlayerData cannot be null");
+
+        this.player = player;
+        this.cooldownMap = playerData.cooldownMap;
+        this.menuHistory = playerData.menuHistory;
     }
 
     @Override
