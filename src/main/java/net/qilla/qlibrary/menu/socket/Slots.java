@@ -1,6 +1,7 @@
 package net.qilla.qlibrary.menu.socket;
 
 import io.papermc.paper.datacomponent.item.ItemLore;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.qilla.qlibrary.util.sound.MenuSound;
 import org.bukkit.Material;
@@ -10,19 +11,15 @@ public class Slots {
 
     public static final QSlot MISSING = QSlot.of(slot -> slot
             .material(Material.BARRIER)
-            .displayName(MiniMessage.miniMessage().deserialize("<red>Missing Item"))
-            .lore(ItemLore.lore(List.of(
-                    MiniMessage.miniMessage().deserialize("<!italic><gray>This item is missing"),
-                    MiniMessage.miniMessage().deserialize("<!italic><gray>from the menu!")
-            )))
+            .displayName(MiniMessage.miniMessage().deserialize("<red>⚠ Missing Item"))
     );
 
     public static final QSlot RETURN = QSlot.of(slot -> slot
             .material(Material.BELL)
             .displayName(MiniMessage.miniMessage().deserialize("<red>Return"))
             .lore(ItemLore.lore(List.of(
-                    MiniMessage.miniMessage().deserialize("<!italic><gray><key:key.mouse.left> to return to your"),
-                    MiniMessage.miniMessage().deserialize("<!italic><gray>previously accessed menu")
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to return to the previous menu")
             )))
             .clickSound(MenuSound.RETURN_MENU)
     );
@@ -41,7 +38,8 @@ public class Slots {
             .material(Material.ARROW)
             .displayName(MiniMessage.miniMessage().deserialize("<white>Previous"))
             .lore(ItemLore.lore(List.of(
-                    MiniMessage.miniMessage().deserialize("<!italic><gray><key:key.mouse.left> to shift the menu backwards")
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to shift this menu backwards")
             )))
             .clickSound(MenuSound.MENU_ROTATE_PREVIOUS)
     );
@@ -50,7 +48,8 @@ public class Slots {
             .material(Material.SPECTRAL_ARROW)
             .displayName(MiniMessage.miniMessage().deserialize("<white>Next"))
             .lore(ItemLore.lore(List.of(
-                    MiniMessage.miniMessage().deserialize("<!italic><gray><key:key.mouse.left> to shift the menu forwards")
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to shift this menu forwards")
             )))
             .clickSound(MenuSound.MENU_ROTATE_NEXT)
     );
@@ -59,8 +58,8 @@ public class Slots {
             .material(Material.OAK_SIGN)
             .displayName(MiniMessage.miniMessage().deserialize("<white>Search"))
             .lore(ItemLore.lore(List.of(
-                    MiniMessage.miniMessage().deserialize("<!italic><gray><key:key.mouse.left> to search for"),
-                    MiniMessage.miniMessage().deserialize("<!italic><gray>something more specific")
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to search")
             )))
             .clickSound(MenuSound.MENU_CLICK_ITEM)
     );
@@ -68,7 +67,9 @@ public class Slots {
     public static final QSlot RESET_SEARCH = QSlot.of(builder2 -> builder2
             .material(Material.BARRIER)
             .displayName(MiniMessage.miniMessage().deserialize("<red>Reset Search"))
-            .lore(ItemLore.lore(List.of(MiniMessage.miniMessage().deserialize("<!italic><gray>Resets your currently searched term")
+            .lore(ItemLore.lore(List.of(
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to reset your search query")
             )))
             .clickSound(MenuSound.RESET)
     );
