@@ -49,8 +49,8 @@ public class NumberUtil {
      * @return Returns a percentage string
      */
 
-    public static @NotNull String numberPercentage(double current, double total) {
-        if (total == 0) return "0%"; // Prevent division by 0
+    public static @NotNull String numberPercentage(double total, double current) {
+        if (total == 0) return "0%";
         double percentage = (current / total) * 100;
         return  (int) percentage + "%";
     }
@@ -65,11 +65,11 @@ public class NumberUtil {
      */
 
     public static @NotNull String numberChar(double number, boolean capitalize) {
-        if (number < 1) return String.valueOf((int) number); // Handle numbers < 1 upfront
+        if (number < 1) return String.valueOf((int) number);
         if (number < 1000) return String.valueOf((int) number);
 
-        int exp = (int) (Math.log10(number) / 3); // Faster: use log base 10 divided by 3
-        if (exp > SUFFIXES.length) return "NaN"; // Prevent index out of bounds
+        int exp = (int) (Math.log10(number) / 3);
+        if (exp > SUFFIXES.length) return "NaN";
 
         char suffix = SUFFIXES[exp - 1];
         if (capitalize) suffix = Character.toUpperCase(suffix);
