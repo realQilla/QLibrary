@@ -24,7 +24,7 @@ public abstract class QStaticMenu implements StaticMenu {
     private final Map<Integer, Socket> socketHolder = new HashMap<>();
     private final List<Integer> totalIndexes = IntStream.range(0, staticConfig().menuSize().getSize()).boxed().toList();
 
-    public QStaticMenu(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData) {
+    public QStaticMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData) {
         Preconditions.checkNotNull(plugin, "Plugin cannot be null");
         Preconditions.checkNotNull(playerData, "PlayerData cannot be null");
 

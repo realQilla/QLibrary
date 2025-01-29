@@ -10,6 +10,7 @@ import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public abstract class QPlayerData<T extends EnhancedPlayer> implements PlayerData<T> {
 
@@ -98,8 +99,9 @@ public abstract class QPlayerData<T extends EnhancedPlayer> implements PlayerDat
 
     @Override
     public CompletableFuture<String> requestInput() {
-        if(inputFuture != null && !inputFuture.isDone()) return inputFuture;
-        return inputFuture = new CompletableFuture<>();
+        if(inputFuture != null && inputFuture.isDone()) return inputFuture;
+        inputFuture = new CompletableFuture<>();
+        return inputFuture.orTimeout(120, TimeUnit.SECONDS);
     }
 
     @Override
@@ -107,8 +109,7 @@ public abstract class QPlayerData<T extends EnhancedPlayer> implements PlayerDat
         Preconditions.checkNotNull(input, "Input cannot be null");
 
         if(inputFuture == null || inputFuture.isDone()) return false;
-
-        this.inputFuture.complete(input);
+        inputFuture.complete(input);
         inputFuture = null;
         return true;
     }

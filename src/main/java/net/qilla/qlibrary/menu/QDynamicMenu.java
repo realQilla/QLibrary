@@ -22,7 +22,7 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
     private final Collection<T> itemPopulation;
     private int shiftIndex;
 
-    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull Collection<T> itemPopulation) {
+    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull Collection<T> itemPopulation) {
         super(plugin, playerData);
         Preconditions.checkNotNull(itemPopulation, "Collection cannot be null");
         this.itemPopulation = itemPopulation;
