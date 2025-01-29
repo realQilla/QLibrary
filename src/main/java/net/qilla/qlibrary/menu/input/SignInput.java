@@ -16,19 +16,18 @@ import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class SignInput extends PlayerInput {
+public final class SignInput extends PlayerInput {
 
     private static final int BLOCK_Y_OFFSET = 7;
     private final EnhancedPlayer player;
     private final List<String> signText;
     private final BlockPos blockPos;
 
-    public SignInput(@NotNull Plugin plugin, @NotNull PlayerData playerData, @NotNull List<String> signText) {
+    public SignInput(@NotNull Plugin plugin, @NotNull PlayerData<EnhancedPlayer> playerData, @NotNull List<String> signText) {
         super(plugin, playerData);
         Preconditions.checkNotNull(signText, "List cannot be null");
         this.player = playerData.getPlayer();

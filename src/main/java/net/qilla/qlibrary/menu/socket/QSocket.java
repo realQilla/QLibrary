@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
-public class QSocket implements Socket{
+public final class QSocket implements Socket{
 
     private final int index;
     private final Slot slot;

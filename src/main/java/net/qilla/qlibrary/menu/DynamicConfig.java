@@ -5,14 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DynamicConfig {
+public final class DynamicConfig {
 
     private final List<Integer> dynamicSlots;
     private final int nextIndex;
     private final int previousIndex;
     private final int shiftAmount;
 
-    protected DynamicConfig(@NotNull Builder builder) {
+    private DynamicConfig(@NotNull Builder builder) {
         Preconditions.checkNotNull(builder, "Builder cannot be null");
 
         this.dynamicSlots = builder.dynamicSlots;

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * category, and the type of playback.
  */
 
-public class QSound {
+public final class QSound {
 
     private final Sound sound;
     private final float volume;

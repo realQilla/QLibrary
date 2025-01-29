@@ -3,7 +3,7 @@ package net.qilla.qlibrary.menu.socket;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.qilla.qlibrary.util.sound.MenuSound;
+import net.qilla.qlibrary.util.sound.QSounds;
 import org.bukkit.Material;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class Slots {
                     Component.empty(),
                     MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to return to the previous menu")
             )))
-            .clickSound(MenuSound.RETURN_MENU)
+            .clickSound(QSounds.Menu.RETURN_MENU)
     );
 
     public static final QSlot EMPTY_MODULAR_Q_SLOT = QSlot.of(slot -> slot
@@ -41,7 +41,7 @@ public class Slots {
                     Component.empty(),
                     MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to shift this menu backwards")
             )))
-            .clickSound(MenuSound.MENU_ROTATE_PREVIOUS)
+            .clickSound(QSounds.Menu.MENU_ROTATE_PREVIOUS)
     );
 
     public static final QSlot NEXT = QSlot.of(slot -> slot
@@ -51,7 +51,7 @@ public class Slots {
                     Component.empty(),
                     MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to shift this menu forwards")
             )))
-            .clickSound(MenuSound.MENU_ROTATE_NEXT)
+            .clickSound(QSounds.Menu.MENU_ROTATE_NEXT)
     );
 
     public static final QSlot SEARCH = QSlot.of(slot -> slot
@@ -61,7 +61,7 @@ public class Slots {
                     Component.empty(),
                     MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to search")
             )))
-            .clickSound(MenuSound.MENU_CLICK_ITEM)
+            .clickSound(QSounds.Menu.MENU_CLICK_ITEM)
     );
 
     public static final QSlot RESET_SEARCH = QSlot.of(builder2 -> builder2
@@ -71,6 +71,6 @@ public class Slots {
                     Component.empty(),
                     MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to reset your search query")
             )))
-            .clickSound(MenuSound.RESET)
+            .clickSound(QSounds.Menu.RESET)
     );
 }

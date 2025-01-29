@@ -2,25 +2,33 @@ package net.qilla.qlibrary.util.tools;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
-import java.util.HashSet;
-import java.util.Set;
 
 public final class CoordUtil {
 
     /**
-     * Utility method for obtaining a block's position within the current chunk
-     * @param blockX The block's X coordinate
-     * @param blockY The block's Y coordinate
-     * @param blockZ The block's Z coordinate
+     * Utility method for obtaining a block's position within the current chunk.
+     The method encodes the chunk-relative Y position in the first 7 digits of the integer.
+     Note: This allows 255 unique Y level chunks. It then stores the block's sub-chunk
+     coordinates: X in the next 4 bits, Y in the subsequent 4 bits, and Z in the final 4 bits.
+     * @param x The block's X coordinate
+     * @param y The block's Y coordinate
+     * @param z The block's Z coordinate
      * @return Returns the blocks location within the current thunk
      */
 
-    public static int getBlockIndexInChunk(int blockX, int blockY, int blockZ) {
-        return ((blockX & 15) << 8) | ((blockZ & 15) << 4) | (blockY & 15);
+    public static int getSubChunkKey(int x, int y, int z) {
+        int chunkY = y >> 4;
+
+        int subChunkX = x & 15;
+        int subChunkY = y & 15;
+        int subChunkZ = z & 15;
+
+        return (chunkY & 255) << 12 | (subChunkX << 8) | (subChunkY << 4) | subChunkZ;
     }
 
     /**
@@ -29,23 +37,20 @@ public final class CoordUtil {
      * @return Returns the blocks location within the current thunk
      */
 
-    public static int getBlockIndexInChunk(@NotNull BlockPos blockPos) {
+    public static int getSubChunkKey(@NotNull BlockPos blockPos) {
         Preconditions.checkNotNull(blockPos, "BlockPos cannot be null");
-        return getBlockIndexInChunk(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        return getSubChunkKey(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     /**
      * Utility method for obtaining a chunk's position within the world
-     * @param chunkX The chunk's X coordinate
-     * @param chunkY The chunk's Y coordinate
-     * @param chunkZ The chunk's Z coordinate
-     * @return Returns the chunk's unique location within a long
+     * @param x The chunk's X coordinate
+     * @param z The chunk's Z coordinate
+     * @return Returns the chunk's unique location within the world
      */
 
-    public static long getChunkKey(int chunkX, int chunkY, int chunkZ) {
-        return (((long) chunkX & 0x1FFFFF) << 42)
-                | (((long) chunkY & 0x1FFFFF) << 21)
-                | ((long) chunkZ & 0x1FFFFF);
+    public static long getChunkKey(int x, int z) {
+        return ((long) x) & 0xFFFFFFFFL | (((long) z) & 0xFFFFFFFFL) << 32;
     }
 
     /**
@@ -56,52 +61,35 @@ public final class CoordUtil {
 
     public static long getChunkKey(@NotNull BlockPos blockPos) {
         Preconditions.checkNotNull(blockPos, "BlockPos cannot be null");
-        return getChunkKey(blockPos.getX() >> 4, blockPos.getY() >> 4, blockPos.getZ() >> 4);
+
+        return getChunkKey(blockPos.getX() >> 4, blockPos.getZ() >> 4);
     }
 
     /**
-     * Utility method for obtaining all Y level chunks within a chunk
-     * @param chunkX The chunk's X coordinate
-     * @param chunkZ The chunk's Z coordinate
-     * @return Returns a set containing all Y level chunks within
-     * the specified chunk
-     */
-
-    public static Set<Long> getYChunkKeys(int chunkX, int chunkZ) {
-        Set<Long> chunkKeys = new HashSet<>();
-        for(int chunkY = -4; chunkY <= 19; chunkY++) {
-            chunkKeys.add(getChunkKey(chunkX, chunkY, chunkZ));
-        }
-        return chunkKeys;
-    }
-
-    /**
-     * Utility method for converting a chunkKey and a chunkInt into a
-     * block position
+     * Utility method for converting a chunkKey and a subChunkKey into
+     * a BlockPos object.
      * @param chunkKey A unique key for a chunk's position
-     * @param chunkInt An integer for the position of the block within a chunk
+     * @param subChunkKey An integer that represents a block's sub-chunk coordinate
+     * within said chunk
      * @return Returns a new Block Position object
      */
 
     @NotNull
-    public static BlockPos getBlockPos(long chunkKey, int chunkInt) {
-        int chunkX = (int) ((chunkKey >> 42) & 0x1FFFFF);
-        int chunkY = (int) ((chunkKey >> 21) & 0x1FFFFF);
-        int chunkZ = (int) (chunkKey & 0x1FFFFF);
+    public static BlockPos getBlockPos(long chunkKey, int subChunkKey) {
+        int chunkX = (int) (chunkKey & 0xFFFFFFFFL);
+        int chunkZ = (int) ((chunkKey >> 32) & 0xFFFFFFFFL);
 
-        if (chunkX >= 0x100000) chunkX -= 0x200000;
-        if (chunkY >= 0x100000) chunkY -= 0x200000;
-        if (chunkZ >= 0x100000) chunkZ -= 0x200000;
+        int chunkY = (subChunkKey >> 12) & 0x1FF;
 
-        int localX = (chunkInt >> 8) & 15;
-        int localZ = (chunkInt >> 4) & 15;
-        int localY = chunkInt & 15;
+        int subChunkX = (subChunkKey >> 8) & 0xF;
+        int subChunkY = (subChunkKey >> 4) & 0xF;
+        int subChunkZ = (subChunkKey) & 0xF;
 
-        int worldX = chunkX * 16 + localX;
-        int worldZ = chunkZ * 16 + localZ;
-        int worldY = chunkY * 16 + localY;
+        int x = (chunkX << 4) | subChunkX;
+        int y = (chunkY << 4) | subChunkY;
+        int z = (chunkZ << 4) | subChunkZ;
 
-        return new BlockPos(worldX, worldY, worldZ);
+        return new BlockPos(x, y, z);
     }
 
     @NotNull

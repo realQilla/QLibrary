@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    implementation("net.kyori:adventure-api:4.17.0")
 }
 
 tasks.shadowJar {

@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 
-public class DExecutor {
+public final class DExecutor {
 
     private static final int DEFAULT_SHUTDOWN_TIMEOUT = 10;
     private final ExecutorService executor;

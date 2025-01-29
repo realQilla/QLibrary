@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class ChatInput extends PlayerInput {
+public final class ChatInput extends PlayerInput {
 
     private final Component chatMessage;
 
-    public ChatInput(@NotNull Plugin plugin, @NotNull PlayerData playerData, @NotNull Component chatMessage) {
+    public ChatInput(@NotNull Plugin plugin, @NotNull PlayerData<EnhancedPlayer> playerData, @NotNull Component chatMessage) {
         super(plugin, playerData);
         this.chatMessage = chatMessage;
     }

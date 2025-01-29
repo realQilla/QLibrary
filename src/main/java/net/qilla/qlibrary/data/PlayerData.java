@@ -12,14 +12,14 @@ import java.util.concurrent.CompletableFuture;
  * player cooldowns, latest input, etc.
  */
 
-public interface PlayerData {
+public interface PlayerData<T extends EnhancedPlayer> {
 
     /**
      * Returns the EnhancedPlayer related to this data
      * @return Returns the player
      */
 
-    @NotNull EnhancedPlayer getPlayer();
+    @NotNull T getPlayer();
 
     /**
      * Gets the remaining cooldown for a cooldown type in milliseconds.

@@ -1,18 +1,22 @@
 package net.qilla.qlibrary.menu;
 
+import com.google.common.base.Preconditions;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class StaticConfig {
+public final class StaticConfig {
 
     private final MenuScale menuSize;
     private final Component title;
     private final int menuIndex;
     private final int returnIndex;
 
-    public StaticConfig(Builder builder) {
+    public StaticConfig(@NotNull Builder builder) {
+        Preconditions.checkNotNull(builder, "Builder cannot be null");
+
         this.menuSize = builder.menuSize;
         this.title = builder.title;
         this.menuIndex = builder.menuIndex;

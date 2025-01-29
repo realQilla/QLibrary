@@ -1,14 +1,19 @@
 package net.qilla.qlibrary.menu;
 
+import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Consumer;
 
-public class SearchConfig {
+public final class SearchConfig {
 
     private final Builder builder;
     private final int searchIndex;
     private final int resetSearchIndex;
 
-    protected SearchConfig(Builder builder) {
+    private SearchConfig(@NotNull Builder builder) {
+        Preconditions.checkNotNull(builder, "Builder cannot be null");
+
         this.builder = builder;
         this.searchIndex = builder.searchIndex;
         this.resetSearchIndex = builder.resetSearchIndex;

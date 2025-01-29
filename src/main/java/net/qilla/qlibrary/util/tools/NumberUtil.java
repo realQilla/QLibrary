@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.text.Format;
 
-public class NumberUtil {
+public final class NumberUtil {
 
     private NumberUtil() {
     }

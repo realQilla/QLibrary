@@ -7,9 +7,8 @@ import net.qilla.qlibrary.menu.socket.Slots;
 import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.CooldownType;
-import net.qilla.qlibrary.util.sound.MenuSound;
+import net.qilla.qlibrary.util.sound.QSounds;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
@@ -69,7 +68,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
                         super.setShiftIndex(0);
                         this.refreshSockets();
                         super.addSocket(resetSearchSocket());
-                        getPlayer().playSound(MenuSound.SIGN_INPUT, true);
+                        getPlayer().playSound(QSounds.Menu.SIGN_INPUT, true);
                     } catch(NumberFormatException ignored) {
                     }
                 }

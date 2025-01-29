@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomUtil {
+public final class RandomUtil {
 
     public static int between(int min, int max) {
         return ThreadLocalRandom.current().nextInt(min, max + 1);

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class QSlot implements Slot {
+public final class QSlot implements Slot {
 
     private final ItemStack itemStack;
     private final QSound appearSound;

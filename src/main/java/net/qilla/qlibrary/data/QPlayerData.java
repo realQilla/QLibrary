@@ -11,14 +11,14 @@ import java.util.EnumMap;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class QPlayerData implements PlayerData{
+public abstract class QPlayerData<T extends EnhancedPlayer> implements PlayerData<T> {
 
-    private final EnhancedPlayer player;
+    private final T player;
     private final EnumMap<CooldownType, Long> cooldownMap;
     private final Deque<QStaticMenu> menuHistory;
     private CompletableFuture<String> inputFuture;
 
-    public QPlayerData(@NotNull EnhancedPlayer player) {
+    public QPlayerData(@NotNull T player) {
         Preconditions.checkNotNull(player, "Player cannot be null");
 
         this.menuHistory = new ArrayDeque<>();
@@ -26,7 +26,7 @@ public class QPlayerData implements PlayerData{
         this.player = player;
     }
 
-    public QPlayerData(@NotNull EnhancedPlayer player, @NotNull QPlayerData playerData) {
+    public QPlayerData(@NotNull T player, @NotNull QPlayerData<T> playerData) {
         Preconditions.checkNotNull(playerData, "PlayerData cannot be null");
 
         this.player = player;
@@ -35,7 +35,7 @@ public class QPlayerData implements PlayerData{
     }
 
     @Override
-    public @NotNull EnhancedPlayer getPlayer() {
+    public @NotNull T getPlayer() {
         return this.player;
     }
 

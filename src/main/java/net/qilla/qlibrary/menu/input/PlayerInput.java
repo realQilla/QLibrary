@@ -3,8 +3,6 @@ package net.qilla.qlibrary.menu.input;
 import com.google.common.base.Preconditions;
 import net.qilla.qlibrary.data.PlayerData;
 import net.qilla.qlibrary.player.EnhancedPlayer;
-import net.qilla.qlibrary.player.QEnhancedPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.*;
@@ -16,9 +14,9 @@ public abstract class PlayerInput {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final Plugin plugin;
-    private final PlayerData playerData;
+    private final PlayerData<EnhancedPlayer> playerData;
 
-    public PlayerInput(@NotNull Plugin plugin, PlayerData playerData) {
+    public PlayerInput(@NotNull Plugin plugin, PlayerData<EnhancedPlayer> playerData) {
         Preconditions.checkNotNull(playerData, "PlayerData cannot be null");
         this.plugin = plugin;
         this.playerData = playerData;
@@ -42,7 +40,7 @@ public abstract class PlayerInput {
         return this.plugin;
     }
 
-    public PlayerData getPlayerData() {
+    public PlayerData<EnhancedPlayer> getPlayerData() {
         return this.playerData;
     }
 

@@ -3,7 +3,7 @@ package net.qilla.qlibrary.util.tools;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-public class TimeUtil {
+public final class TimeUtil {
 
     private TimeUtil() {
     }
