@@ -48,7 +48,7 @@ public interface StaticMenu extends InventoryHolder {
 
     @NotNull EnhancedPlayer getPlayer();
 
-    @NotNull PlayerData getPlayerData();
+    @NotNull PlayerData<? extends EnhancedPlayer> getPlayerData();
 
     @NotNull Inventory getInventory();
 

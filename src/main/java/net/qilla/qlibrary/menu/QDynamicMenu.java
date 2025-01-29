@@ -6,6 +6,7 @@ import net.qilla.qlibrary.menu.socket.Slots;
 import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.CooldownType;
+import net.qilla.qlibrary.player.EnhancedPlayer;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
@@ -21,7 +22,7 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
     private final Collection<T> itemPopulation;
     private int shiftIndex;
 
-    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData playerData, @NotNull Collection<T> itemPopulation) {
+    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull Collection<T> itemPopulation) {
         super(plugin, playerData);
         Preconditions.checkNotNull(itemPopulation, "Collection cannot be null");
         this.itemPopulation = itemPopulation;

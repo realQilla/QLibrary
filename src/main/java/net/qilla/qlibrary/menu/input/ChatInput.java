@@ -14,7 +14,7 @@ public final class ChatInput extends PlayerInput {
 
     private final Component chatMessage;
 
-    public ChatInput(@NotNull Plugin plugin, @NotNull PlayerData<EnhancedPlayer> playerData, @NotNull Component chatMessage) {
+    public ChatInput(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull Component chatMessage) {
         super(plugin, playerData);
         this.chatMessage = chatMessage;
     }

@@ -7,6 +7,7 @@ import net.qilla.qlibrary.menu.socket.Slots;
 import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.CooldownType;
+import net.qilla.qlibrary.player.EnhancedPlayer;
 import net.qilla.qlibrary.util.sound.QSounds;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
@@ -22,7 +23,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
 
     private List<T> localPopulation;
 
-    protected QSearchMenu(@NotNull Plugin plugin, @NotNull PlayerData playerData, @NotNull Collection<T> itemPopulation) {
+    protected QSearchMenu(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull Collection<T> itemPopulation) {
         super(plugin, playerData, itemPopulation);
         Preconditions.checkNotNull(itemPopulation, "Item Population cannot be null");
         this.localPopulation = new ArrayList<>(itemPopulation);

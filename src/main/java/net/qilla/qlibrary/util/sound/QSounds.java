@@ -5,6 +5,14 @@ import org.bukkit.SoundCategory;
 
 public final class QSounds {
 
+    private QSounds() {
+    }
+
+    public static class General {
+        public static final QSound GENERAL_ERROR = QSound.of(Sound.ENTITY_VILLAGER_NO, 0.5f, 1, SoundCategory.PLAYERS, PlayType.PLAYER);
+        public static final QSound GENERAL_SUCCESS = QSound.of(Sound.ENTITY_VILLAGER_YES, 0.5f, 1, SoundCategory.PLAYERS, PlayType.PLAYER);
+        public static final QSound GENERAL_SUCCESS_2 = QSound.of(Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.5f, 1, SoundCategory.PLAYERS, PlayType.PLAYER);
+    }
 
     public static class Menu {
         public static final QSound RETURN_MENU = QSound.of(Sound.BLOCK_NOTE_BLOCK_BELL, 0.25f, 1f, SoundCategory.PLAYERS, PlayType.PLAYER);

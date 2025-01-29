@@ -20,11 +20,11 @@ public abstract class QStaticMenu implements StaticMenu {
     private final Inventory inventory;
     private final StaticConfig staticConfig;
     private final EnhancedPlayer enhancedPlayer;
-    private final PlayerData<EnhancedPlayer> playerData;
+    private final PlayerData<? extends EnhancedPlayer> playerData;
     private final Map<Integer, Socket> socketHolder = new HashMap<>();
     private final List<Integer> totalIndexes = IntStream.range(0, staticConfig().menuSize().getSize()).boxed().toList();
 
-    public QStaticMenu(@NotNull Plugin plugin, @NotNull PlayerData<EnhancedPlayer> playerData) {
+    public QStaticMenu(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData) {
         Preconditions.checkNotNull(plugin, "Plugin cannot be null");
         Preconditions.checkNotNull(playerData, "PlayerData cannot be null");
 
@@ -165,7 +165,7 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
-    public @NotNull PlayerData getPlayerData() {
+    public @NotNull PlayerData<? extends EnhancedPlayer> getPlayerData() {
         return this.playerData;
     }
 

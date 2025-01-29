@@ -14,9 +14,9 @@ public abstract class PlayerInput {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final Plugin plugin;
-    private final PlayerData<EnhancedPlayer> playerData;
+    private final PlayerData<? extends EnhancedPlayer> playerData;
 
-    public PlayerInput(@NotNull Plugin plugin, PlayerData<EnhancedPlayer> playerData) {
+    public PlayerInput(@NotNull Plugin plugin, PlayerData<? extends EnhancedPlayer> playerData) {
         Preconditions.checkNotNull(playerData, "PlayerData cannot be null");
         this.plugin = plugin;
         this.playerData = playerData;
@@ -40,7 +40,7 @@ public abstract class PlayerInput {
         return this.plugin;
     }
 
-    public PlayerData<EnhancedPlayer> getPlayerData() {
+    public PlayerData<? extends EnhancedPlayer> getPlayerData() {
         return this.playerData;
     }
 

@@ -27,7 +27,7 @@ public final class SignInput extends PlayerInput {
     private final List<String> signText;
     private final BlockPos blockPos;
 
-    public SignInput(@NotNull Plugin plugin, @NotNull PlayerData<EnhancedPlayer> playerData, @NotNull List<String> signText) {
+    public SignInput(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull List<String> signText) {
         super(plugin, playerData);
         Preconditions.checkNotNull(signText, "List cannot be null");
         this.player = playerData.getPlayer();
