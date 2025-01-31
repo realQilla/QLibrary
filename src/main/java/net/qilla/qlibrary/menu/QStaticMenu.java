@@ -130,6 +130,7 @@ public abstract class QStaticMenu implements StaticMenu {
 
     @Override
     public @Nullable Socket removeSocket(int index) {
+        if(!socketHolder.containsKey(index)) return null;
         inventory.setItem(index, Slots.FILLER.getItem());
         return socketHolder.remove(index);
     }
