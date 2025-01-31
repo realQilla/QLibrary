@@ -1,7 +1,6 @@
 package net.qilla.qlibrary.menu;
 
 import net.qilla.qlibrary.data.PlayerData;
-import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.EnhancedPlayer;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,8 +19,6 @@ public interface StaticMenu extends InventoryHolder {
 
     void open(boolean toHistory);
 
-    void close();
-
     void handleClick(@NotNull InventoryClickEvent event);
 
     boolean returnMenu();
@@ -36,11 +33,13 @@ public interface StaticMenu extends InventoryHolder {
 
     @Nullable Socket removeSocket(int index);
 
+    void clearSockets();
+
     void inventoryClickEvent(@NotNull InventoryClickEvent event);
 
-    void inventoryOpenEvent(InventoryOpenEvent event);
+    void inventoryOpenEvent(@NotNull InventoryOpenEvent event);
 
-    void inventoryCloseEvent(InventoryCloseEvent event);
+    void inventoryCloseEvent(@NotNull InventoryCloseEvent event);
 
     @NotNull Socket returnSocket();
 
@@ -48,7 +47,7 @@ public interface StaticMenu extends InventoryHolder {
 
     @NotNull EnhancedPlayer getPlayer();
 
-    @NotNull PlayerData<? extends EnhancedPlayer> getPlayerData();
+    @NotNull PlayerData<? extends @NotNull EnhancedPlayer> getPlayerData();
 
     @NotNull Inventory getInventory();
 
@@ -59,4 +58,6 @@ public interface StaticMenu extends InventoryHolder {
     @NotNull Socket menuSocket();
 
     @NotNull StaticConfig staticConfig();
+
+    void shutdown();
 }

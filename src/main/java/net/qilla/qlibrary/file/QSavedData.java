@@ -101,7 +101,7 @@ public abstract class QSavedData<T> {
      */
 
     public void save() {
-        try(Writer writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
+        try(BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
             gson.toJson(storedData, type, writer);
         } catch(IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to save file at " + filePath, e);
@@ -119,15 +119,13 @@ public abstract class QSavedData<T> {
     }
 
     /**
-     * Load the data from the file into the managed object.
-     * This method must be implemented by subclasses.
+     * Load the data from the file into the managed object. This method must be implemented by subclasses.
      */
 
     public abstract void load();
 
     /**
-     * Clear or reset the managed object in memory.
-     * This method must be implemented by subclasses.
+     * Clear or reset the managed object in memory. This method must be implemented by subclasses.
      */
 
     public abstract void clear();

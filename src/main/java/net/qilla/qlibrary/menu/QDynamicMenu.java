@@ -6,7 +6,6 @@ import net.qilla.qlibrary.menu.socket.Slots;
 import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.CooldownType;
-import net.qilla.qlibrary.player.EnhancedPlayer;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
@@ -19,16 +18,17 @@ import java.util.List;
 public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu<T> {
 
     private final List<Integer> dynamicSlots;
-    private final Collection<T> itemPopulation;
+    private List<T> itemPopulation;
     private int shiftIndex;
 
-    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull Collection<T> itemPopulation) {
+    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull List<T> itemPopulation) {
         super(plugin, playerData);
         Preconditions.checkNotNull(itemPopulation, "Collection cannot be null");
         this.itemPopulation = itemPopulation;
         this.dynamicSlots = dynamicConfig().dynamicIndexes();
         this.shiftIndex = 0;
 
+        this.populateModular();
         if(itemPopulation.size() > dynamicSlots.size()) super.addSocket(nextSocket());
     }
 
@@ -37,6 +37,12 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
         getTotalIndexes().stream()
                 .filter(index -> !dynamicSlots.contains(index))
                 .forEach(index -> super.getInventory().addItem(Slots.FILLER.getItem()));
+    }
+
+    @Override
+    public void updateItemPopulation(@NotNull List<T> itemPopulation) {
+        this.itemPopulation = itemPopulation;
+        this.refreshSockets();
     }
 
     @Override
@@ -53,15 +59,15 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
                 int index = iterator.next();
                 Socket socket = createSocket(index, item);
                 if(socket != null) socketList.add(socket);
-                else super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR_Q_SLOT));
+                else super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR));
             }
         }
         super.addSocket(socketList);
-        iterator.forEachRemaining(index -> super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR_Q_SLOT)));
+        iterator.forEachRemaining(index -> super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR)));
     }
 
     @Override
-    public boolean rotateNext(InventoryClickEvent event, int amount) {
+    public boolean rotateNext(@NotNull InventoryClickEvent event, int amount) {
         ClickType clickType = event.getClick();
 
         if(clickType.isShiftClick() && clickType.isLeftClick()) {
@@ -79,14 +85,13 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
     }
 
     @Override
-    public boolean rotatePrevious(InventoryClickEvent event, int amount) {
+    public boolean rotatePrevious(@NotNull InventoryClickEvent event, int amount) {
         ClickType clickType = event.getClick();
         if(clickType.isShiftClick() && clickType.isLeftClick()) {
             for(int i = 0; i < dynamicSlots.size() / amount; i++) {
                 if((shiftIndex -= amount) < 0) break;
             }
-        }
-        else if(clickType.isLeftClick()) shiftIndex -= amount;
+        } else if(clickType.isLeftClick()) shiftIndex -= amount;
         else return false;
 
         this.refreshSockets();
@@ -141,6 +146,6 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
             if(clickType.isLeftClick()) {
                 return this.rotatePrevious(event, dynamicConfig().shiftAmount());
             } else return false;
-    }, CooldownType.MENU_ROTATE);
+        }, CooldownType.MENU_ROTATE);
     }
 }

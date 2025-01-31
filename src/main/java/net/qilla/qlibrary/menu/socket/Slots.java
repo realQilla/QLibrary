@@ -24,7 +24,7 @@ public class Slots {
             .clickSound(QSounds.Menu.RETURN_MENU)
     );
 
-    public static final QSlot EMPTY_MODULAR_Q_SLOT = QSlot.of(slot -> slot
+    public static final QSlot EMPTY_MODULAR = QSlot.of(slot -> slot
             .material(Material.PALE_OAK_BUTTON)
             .hideTooltip(true)
     );
@@ -72,5 +72,35 @@ public class Slots {
                     MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to reset your search query")
             )))
             .clickSound(QSounds.Menu.RESET)
+    );
+
+    public static final Slot SAVED_CHANGES = QSlot.of(builder -> builder
+            .material(Material.SLIME_BALL)
+            .displayName(MiniMessage.miniMessage().deserialize("<green><bold>SAVE</bold> to Config"))
+            .lore(ItemLore.lore(List.of(
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to save any made changes.")
+            )))
+            .clickSound(QSounds.Menu.MENU_CLICK_ITEM)
+    );
+
+    public static final Slot RELOADED_CHANGES = QSlot.of(builder -> builder
+            .material(Material.SNOWBALL)
+            .displayName(MiniMessage.miniMessage().deserialize("<aqua><bold>RELOAD</bold> from Config"))
+            .lore(ItemLore.lore(List.of(
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to load the config, undoing any unsaved changes.")
+            )))
+            .clickSound(QSounds.Menu.MENU_CLICK_ITEM)
+    );
+
+    public static final Slot CLEAR_SAVED = QSlot.of(builder -> builder
+            .material(Material.FIRE_CHARGE)
+            .displayName(MiniMessage.miniMessage().deserialize("<red><bold>CLEAR</bold> Config"))
+            .lore(ItemLore.lore(List.of(
+                    Component.empty(),
+                    MiniMessage.miniMessage().deserialize("<!italic><yellow><gold>① <key:key.mouse.left></gold> to clear any stored data.")
+            )))
+            .clickSound(QSounds.Menu.MENU_CLICK_ITEM)
     );
 }

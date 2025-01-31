@@ -7,7 +7,6 @@ import net.qilla.qlibrary.menu.socket.Slots;
 import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.CooldownType;
-import net.qilla.qlibrary.player.EnhancedPlayer;
 import net.qilla.qlibrary.util.sound.QSounds;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
@@ -15,7 +14,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,7 +21,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
 
     private List<T> localPopulation;
 
-    protected QSearchMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull Collection<T> itemPopulation) {
+    protected QSearchMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull List<T> itemPopulation) {
         super(plugin, playerData, itemPopulation);
         Preconditions.checkNotNull(itemPopulation, "Item Population cannot be null");
         this.localPopulation = new ArrayList<>(itemPopulation);
@@ -45,11 +43,11 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
                 int index = iterator.next();
                 Socket socket = createSocket(index, item);
                 if(socket != null) socketList.add(socket);
-                else super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR_Q_SLOT));
+                else super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR));
             }
         });
         super.addSocket(socketList);
-        iterator.forEachRemaining(index -> super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR_Q_SLOT)));
+        iterator.forEachRemaining(index -> super.addSocket(new QSocket(index, Slots.EMPTY_MODULAR)));
     }
 
     @Override
@@ -80,7 +78,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
     }
 
     @Override
-    public boolean rotateNext(InventoryClickEvent event, int amount) {
+    public boolean rotateNext(@NotNull InventoryClickEvent event, int amount) {
         ClickType clickType = event.getClick();
 
         if(clickType.isShiftClick() && clickType.isLeftClick()) {
@@ -98,7 +96,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
     }
 
     @Override
-    public boolean rotatePrevious(InventoryClickEvent event, int amount) {
+    public boolean rotatePrevious(@NotNull InventoryClickEvent event, int amount) {
         ClickType clickType = event.getClick();
         if(clickType.isShiftClick() && clickType.isLeftClick()) {
             for(int i = 0; i < super.getDynamicSlots().size() / amount; i++) {
@@ -132,7 +130,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
     }
 
     @Override
-    public boolean matchSearchCriteria(T item, String search) {
+    public boolean matchSearchCriteria(@NotNull T item, @NotNull String search) {
         return getString(item).toLowerCase().contains(search.toLowerCase());
     }
 

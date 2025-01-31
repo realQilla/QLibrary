@@ -10,11 +10,15 @@ import java.util.List;
 
 public interface DynamicMenu<T> {
 
+    void updateItemPopulation(@NotNull List<T> itemPopulation);
+
     void populateModular();
 
-    boolean rotateNext(InventoryClickEvent event, int amount);
+    @Nullable Socket createSocket(int index, T item);
 
-    boolean rotatePrevious(InventoryClickEvent event, int amount);
+    boolean rotateNext(@NotNull InventoryClickEvent event, int amount);
+
+    boolean rotatePrevious(@NotNull InventoryClickEvent event, int amount);
 
     @NotNull Collection<T> getItemPopulation();
 
@@ -29,6 +33,4 @@ public interface DynamicMenu<T> {
     @NotNull Socket previousSocket();
 
     @NotNull DynamicConfig dynamicConfig();
-
-    @Nullable Socket createSocket(int index, T item);
 }

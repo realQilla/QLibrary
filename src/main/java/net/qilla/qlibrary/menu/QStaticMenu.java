@@ -53,11 +53,6 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
-    public void close() {
-        enhancedPlayer.closeInventory();
-    }
-
-    @Override
     public void handleClick(@NotNull InventoryClickEvent event) {
         Preconditions.checkNotNull(event, "InventoryClickEvent cannot be null");
         Socket socket = socketHolder.get(event.getSlot());
@@ -70,7 +65,7 @@ public abstract class QStaticMenu implements StaticMenu {
     public boolean returnMenu() {
         Optional<QStaticMenu> optional = playerData.popFromHistory();
         if(optional.isEmpty()) {
-            this.close();
+            this.inventory.close();
             return true;
         }
         QStaticMenu menu = optional.get();
@@ -136,6 +131,12 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
+    public void clearSockets() {
+        socketHolder.clear();
+        this.finalizeMenu();
+    }
+
+    @Override
     public void inventoryClickEvent(@NotNull InventoryClickEvent event) {
         Preconditions.checkNotNull(event, "InventoryClickEvent cannot be null");
 
@@ -180,12 +181,18 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
-    public void inventoryOpenEvent(InventoryOpenEvent event) {
+    public void inventoryOpenEvent(@NotNull InventoryOpenEvent event) {
         //Optionally to be overwritten
     }
 
     @Override
-    public void inventoryCloseEvent(InventoryCloseEvent event) {
+    public void inventoryCloseEvent(@NotNull InventoryCloseEvent event) {
         //Optionally to be overwritten
+    }
+
+    @Override
+    public void shutdown() {
+        this.clearSockets();
+        this.inventory.close();
     }
 }
