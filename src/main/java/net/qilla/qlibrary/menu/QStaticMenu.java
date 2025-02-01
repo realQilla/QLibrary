@@ -1,20 +1,26 @@
 package net.qilla.qlibrary.menu;
 
 import com.google.common.base.Preconditions;
+import net.kyori.adventure.text.Component;
 import net.qilla.qlibrary.data.PlayerData;
+import net.qilla.qlibrary.menu.input.ChatInput;
+import net.qilla.qlibrary.menu.input.CompleteInput;
+import net.qilla.qlibrary.menu.input.SignInput;
 import net.qilla.qlibrary.menu.socket.*;
 import net.qilla.qlibrary.player.CooldownType;
 import net.qilla.qlibrary.player.EnhancedPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-public abstract class QStaticMenu implements StaticMenu {
+public abstract class QStaticMenu implements StaticMenu, Listener {
 
     private final Plugin plugin;
     private final Inventory inventory;
@@ -40,6 +46,20 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
+    public void requestSignInput(List<String> text, CompleteInput then) {
+        new SignInput(plugin, playerData, text).init(result -> {
+            Bukkit.getScheduler().runTask(plugin, () -> then.run(result));
+        });
+    }
+
+    @Override
+    public void requestChatInput(List<Component> text, CompleteInput then) {
+        new ChatInput(plugin, playerData, text).init(result -> {
+            Bukkit.getScheduler().runTask(plugin, () -> then.run(result));
+        });
+    }
+
+    @Override
     public void finalizeMenu() {
         totalIndexes.stream()
                 .filter(index -> !socketHolder.containsKey(index))
@@ -50,15 +70,6 @@ public abstract class QStaticMenu implements StaticMenu {
     public void open(boolean toHistory) {
         enhancedPlayer.openInventory(inventory);
         if(toHistory) playerData.pushToHistory(this);
-    }
-
-    @Override
-    public void handleClick(@NotNull InventoryClickEvent event) {
-        Preconditions.checkNotNull(event, "InventoryClickEvent cannot be null");
-        Socket socket = socketHolder.get(event.getSlot());
-        if(socket != null) {
-            socket.onClick(enhancedPlayer, event, playerData);
-        }
     }
 
     @Override
@@ -124,6 +135,11 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
+    public @NotNull Map<Integer, Socket> getSockets() {
+        return Collections.unmodifiableMap(socketHolder);
+    }
+
+    @Override
     public @Nullable Socket removeSocket(int index) {
         if(!socketHolder.containsKey(index)) return null;
         inventory.setItem(index, Slots.FILLER.getItem());
@@ -134,16 +150,6 @@ public abstract class QStaticMenu implements StaticMenu {
     public void clearSockets() {
         socketHolder.clear();
         this.finalizeMenu();
-    }
-
-    @Override
-    public void inventoryClickEvent(@NotNull InventoryClickEvent event) {
-        Preconditions.checkNotNull(event, "InventoryClickEvent cannot be null");
-
-        event.setCancelled(true);
-        if(event.getClickedInventory().getHolder() instanceof QStaticMenu) {
-            this.handleClick(event);
-        }
     }
 
     @Override
@@ -162,13 +168,13 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
-    public @NotNull EnhancedPlayer getPlayer() {
-        return this.enhancedPlayer;
+    public @NotNull PlayerData<? extends EnhancedPlayer> getPlayerData() {
+        return this.playerData;
     }
 
     @Override
-    public @NotNull PlayerData<? extends EnhancedPlayer> getPlayerData() {
-        return this.playerData;
+    public @NotNull EnhancedPlayer getPlayer() {
+        return this.enhancedPlayer;
     }
 
     @Override
@@ -181,18 +187,29 @@ public abstract class QStaticMenu implements StaticMenu {
     }
 
     @Override
-    public void inventoryOpenEvent(@NotNull InventoryOpenEvent event) {
-        //Optionally to be overwritten
-    }
-
-    @Override
-    public void inventoryCloseEvent(@NotNull InventoryCloseEvent event) {
-        //Optionally to be overwritten
-    }
-
-    @Override
     public void shutdown() {
         this.clearSockets();
         this.inventory.close();
+    }
+
+    @Override
+    public void playerClickMenu(InventoryClickEvent event) {
+        event.setCancelled(true);
+
+        Socket socket = socketHolder.get(event.getSlot());
+        if(socket != null) socket.onClick(enhancedPlayer, event, playerData);
+    }
+
+    @Override
+    public void playerInteractMenu(InventoryInteractEvent event) {
+        event.setCancelled(true);
+    }
+
+    @Override
+    public void playerOpenMenu(InventoryOpenEvent event) {
+    }
+
+    @Override
+    public void playerCloseMenu(InventoryCloseEvent event) {
     }
 }

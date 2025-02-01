@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DynamicMenu<T> {
 
-    void updateItemPopulation(@NotNull List<T> itemPopulation);
+    void updateItemPopulation(@NotNull Collection<T> itemPopulation);
 
     void populateModular();
 

@@ -10,25 +10,22 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+
+import java.util.*;
 
 public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu<T> {
 
     private final List<Integer> dynamicSlots;
-    private List<T> itemPopulation;
+    private Collection<T> itemPopulation;
     private int shiftIndex;
 
-    protected QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull List<T> itemPopulation) {
+    public QDynamicMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull Collection<T> itemPopulation) {
         super(plugin, playerData);
         Preconditions.checkNotNull(itemPopulation, "Collection cannot be null");
         this.itemPopulation = itemPopulation;
         this.dynamicSlots = dynamicConfig().dynamicIndexes();
         this.shiftIndex = 0;
 
-        this.populateModular();
         if(itemPopulation.size() > dynamicSlots.size()) super.addSocket(nextSocket());
     }
 
@@ -40,7 +37,7 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
     }
 
     @Override
-    public void updateItemPopulation(@NotNull List<T> itemPopulation) {
+    public void updateItemPopulation(@NotNull Collection<T> itemPopulation) {
         this.itemPopulation = itemPopulation;
         this.refreshSockets();
     }
@@ -111,7 +108,7 @@ public abstract class QDynamicMenu<T> extends QStaticMenu implements DynamicMenu
 
     @Override
     public @NotNull Collection<T> getItemPopulation() {
-        return itemPopulation;
+        return Collections.unmodifiableCollection(itemPopulation);
     }
 
     @Override

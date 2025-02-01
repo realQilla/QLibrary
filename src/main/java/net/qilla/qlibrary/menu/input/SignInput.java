@@ -42,13 +42,13 @@ public final class SignInput extends PlayerInput {
                 .thenAccept(onComplete).thenRun(this::resetBlockState);
     }
 
-    public void resetBlockState() {
+    private void resetBlockState() {
         Bukkit.getScheduler().runTask(super.getPlugin(), () -> {
             player.sendPacket(new ClientboundBlockUpdatePacket(blockPos, player.getHandle().serverLevel().getBlockState(blockPos)));
         });
     }
 
-    public void openMenu() {
+    private void openMenu() {
         CraftSign<SignBlockEntity> sign = createSign(signText);
 
         Bukkit.getScheduler().runTask(super.getPlugin(), () -> {
@@ -58,7 +58,7 @@ public final class SignInput extends PlayerInput {
         });
     }
 
-    public @NotNull  CraftSign<SignBlockEntity> createSign(@NotNull List<String> text) {
+    private @NotNull  CraftSign<SignBlockEntity> createSign(@NotNull List<String> text) {
         Preconditions.checkNotNull(text, "Text cannot be null");
 
         CraftSign<SignBlockEntity> sign = new CraftSign<>(player.getWorld(), new SignBlockEntity(blockPos, Blocks.OAK_SIGN.defaultBlockState()));

@@ -2,13 +2,11 @@ package net.qilla.qlibrary.menu;
 
 import com.google.common.base.Preconditions;
 import net.qilla.qlibrary.data.PlayerData;
-import net.qilla.qlibrary.menu.input.SignInput;
 import net.qilla.qlibrary.menu.socket.Slots;
 import net.qilla.qlibrary.menu.socket.QSocket;
 import net.qilla.qlibrary.menu.socket.Socket;
 import net.qilla.qlibrary.player.CooldownType;
 import net.qilla.qlibrary.util.sound.QSounds;
-import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
@@ -21,7 +19,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
 
     private List<T> localPopulation;
 
-    protected QSearchMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull List<T> itemPopulation) {
+    public QSearchMenu(@NotNull Plugin plugin, @NotNull PlayerData<?> playerData, @NotNull List<T> itemPopulation) {
         super(plugin, playerData, itemPopulation);
         Preconditions.checkNotNull(itemPopulation, "Item Population cannot be null");
         this.localPopulation = new ArrayList<>(itemPopulation);
@@ -31,9 +29,9 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
 
     @Override
     public void populateModular() {
-        int fromIndex = Math.min(super.getShiftIndex(), this.localPopulation.size());
+        int fromIndex = Math.min(super.getShiftIndex(), localPopulation.size());
         int toIndex = Math.min(fromIndex + dynamicConfig().dynamicIndexes().size(), this.localPopulation.size());
-        List<T> shiftedList = new ArrayList<>(this.localPopulation).subList(fromIndex, toIndex);
+        List<T> shiftedList = new ArrayList<>(localPopulation).subList(fromIndex, toIndex);
 
         Iterator<Integer> iterator = dynamicConfig().dynamicIndexes().iterator();
         List<Socket> socketList = new ArrayList<>();
@@ -52,27 +50,21 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
 
     @Override
     public boolean searchFor() {
-        List<String> signText = List.of(
-                "^^^^^^^^^^^^^^^",
-                "Keywords to",
-                "narrow search"
-        );
-        new SignInput(super.getPlugin(), super.getPlayerData(), signText).init(result -> {
-            Bukkit.getScheduler().runTask(super.getPlugin(), () -> {
-                if(!result.isBlank()) {
-                    this.localPopulation = getItemPopulation().stream()
-                            .filter(item -> matchSearchCriteria(item, result))
-                            .toList();
-                    try {
-                        super.setShiftIndex(0);
-                        this.refreshSockets();
-                        super.addSocket(resetSearchSocket());
-                        getPlayer().playSound(QSounds.Menu.SIGN_INPUT, true);
-                    } catch(NumberFormatException ignored) {
-                    }
+        List<String> signText = List.of("^^^^^^^^^^^^^^^", "Keywords to", "narrow search");
+        super.requestSignInput(signText, result -> {
+            if(!result.isBlank()) {
+                localPopulation = getItemPopulation().stream()
+                        .filter(item -> matchSearchCriteria(item, result))
+                        .toList();
+                try {
+                    super.setShiftIndex(0);
+                    this.refreshSockets();
+                    super.addSocket(resetSearchSocket());
+                    getPlayer().playSound(QSounds.Menu.SIGN_INPUT, true);
+                } catch(NumberFormatException ignored) {
                 }
-                super.open(false);
-            });
+            }
+            super.open(false);
         });
         return true;
     }
@@ -125,7 +117,7 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
         localPopulation = new ArrayList<>(super.getItemPopulation());
         super.removeSocket(searchConfig().resetSearchIndex());
         super.setShiftIndex(0);
-        refreshSockets();
+        this.refreshSockets();
         return true;
     }
 
@@ -138,9 +130,8 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
     public @NotNull QSocket searchSocket() {
         return new QSocket(searchConfig().searchIndex(), Slots.SEARCH, event -> {
             ClickType clickType = event.getClick();
-            if(clickType.isLeftClick()) {
-                return this.searchFor();
-            } else return false;
+            if(!clickType.isLeftClick()) return false;
+            return this.searchFor();
         }, CooldownType.MENU_CLICK);
     }
 
@@ -148,9 +139,8 @@ public abstract class QSearchMenu<T> extends QDynamicMenu<T> implements SearchMe
     public @NotNull QSocket resetSearchSocket() {
         return new QSocket(searchConfig().resetSearchIndex(), Slots.RESET_SEARCH, event -> {
             ClickType clickType = event.getClick();
-            if(clickType.isLeftClick()) {
-                return this.resetSearch();
-            } else return false;
+            if(!clickType.isLeftClick()) return false;
+            return this.resetSearch();
         }, CooldownType.MENU_CLICK);
     }
 }

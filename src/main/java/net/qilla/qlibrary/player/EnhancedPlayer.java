@@ -20,13 +20,15 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Sends a packet to the player
+         *
          * @param packet
          */
 
         void sendPacket(Packet<?> packet);
 
         /**
-         * Broadcasts a packet globally
+         * Broadcasts a packet to all players that are able to receive this packet
+         *
          * @param packet
          */
 
@@ -34,6 +36,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Gets the server player handle
+         *
          * @return Returns the player's handle
          */
 
@@ -41,6 +44,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Sends a message using the minimessage format
+         *
          * @param message Message to be displayed
          */
 
@@ -48,6 +52,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Sends a message using a component
+         *
          * @param component a message
          */
 
@@ -55,6 +60,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Sends a message using the minimessage format
+         *
          * @param message The message to send
          */
 
@@ -62,6 +68,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Sends a message using a component
+         *
          * @param component a message
          */
 
@@ -69,6 +76,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Plays a sound with custom properties set utilizing a QSound object
+         *
          * @param qSound
          * @param randomPitch
          */
@@ -77,6 +85,7 @@ public interface EnhancedPlayer extends Player {
 
         /**
          * Plays a sound with custom properties that can each be specified.
+         *
          * @param sound
          * @param volume
          * @param pitch

@@ -4,19 +4,20 @@ import net.kyori.adventure.text.Component;
 import net.qilla.qlibrary.data.PlayerData;
 import net.qilla.qlibrary.player.EnhancedPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public final class ChatInput extends PlayerInput {
 
-    private final Component chatMessage;
+    private final List<Component> text;
 
-    public ChatInput(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull Component chatMessage) {
+    public ChatInput(@NotNull Plugin plugin, @NotNull PlayerData<? extends EnhancedPlayer> playerData, @NotNull List<Component> text) {
         super(plugin, playerData);
-        this.chatMessage = chatMessage;
+        this.text = text;
     }
 
     @Override
@@ -31,7 +32,7 @@ public final class ChatInput extends PlayerInput {
 
         Bukkit.getScheduler().runTask(super.getPlugin(), () -> {
             player.closeInventory();
-            player.sendMessage(chatMessage);
+            text.forEach(player::sendMessage);
         });
     }
 }
